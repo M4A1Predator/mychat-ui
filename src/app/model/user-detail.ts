@@ -1,5 +1,4 @@
-export class User {
+export class UserDetail {
   public id: string;
   public username: string;
-  public accessToken: string;
 }

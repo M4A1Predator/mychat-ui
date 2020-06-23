@@ -8,5 +8,7 @@ export function authReducer(state = initialState, action: AuthAction) {
     case AuthActionType.AUTH_LOGIN_SUCCESS: {
       return { ...state, user: action.payload };
     }
+    default:
+      return state;
   }
 }

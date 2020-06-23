@@ -1,7 +1,9 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { StoreModule, ActionReducer, MetaReducer } from '@ngrx/store';
+import { StoreModule, ActionReducer, MetaReducer, ActionReducerMap } from '@ngrx/store';
 import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+import { localStorageSync } from 'ngrx-store-localstorage';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -15,6 +17,7 @@ import { AuthEffects } from './auth/AuthEffects';
 import { EffectsModule } from '@ngrx/effects';
 import { HomeComponent } from './home/home.component';
 import { ConversationListComponent } from './conversation/conversation-list/conversation-list.component';
+import { AuthGuardService } from './auth/auth-guard.service';
 
 export function debug(reducer: ActionReducer<any>): ActionReducer<any> {
   return (state, action) => {
@@ -23,7 +26,18 @@ export function debug(reducer: ActionReducer<any>): ActionReducer<any> {
     return reducer(state, action);
   };
 }
-export const metaReducers: MetaReducer<any>[] = [debug];
+
+export const rootReducer = {
+  user: authReducer
+};
+// const reducers: ActionReducerMap<any> = {user: authReducer};
+
+export function localStorageSyncReducer(reducer: ActionReducer<any>): ActionReducer<any> {
+  // return localStorageSync({keys: [{ncchat: ['user']}]})(reducer);
+  return localStorageSync({keys: ['user'], rehydrate: true})(reducer);
+}
+
+export const metaReducers: MetaReducer<any>[] = [debug, localStorageSyncReducer];
 
 @NgModule({
   declarations: [
@@ -38,13 +52,14 @@ export const metaReducers: MetaReducer<any>[] = [debug];
   imports: [
     BrowserModule,
     AppRoutingModule,
+    HttpClientModule,
     FormsModule,
-    StoreModule.forRoot({}),
-    StoreModule.forFeature('user', authReducer, { metaReducers }),
+    StoreModule.forRoot(rootReducer, {metaReducers}),
+    // StoreModule.forFeature('user', authReducer, { metaReducers }),
     EffectsModule.forRoot([]),
     EffectsModule.forFeature([AuthEffects])
   ],
-  providers: [],
+  providers: [AuthGuardService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

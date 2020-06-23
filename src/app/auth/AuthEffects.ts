@@ -19,14 +19,14 @@ export class AuthEffects {
   @Effect()
   login$ = this.actions$.pipe(
     ofType(AuthActionType.AUTH_LOGIN),
-    switchMap(() =>
-      this.authService.login(new Credential()).pipe(
+    switchMap((act: any) => {
+      return this.authService.login(act.payload).pipe(
         map((user: User) => {
-          // console.log(user);
+          console.log(user);
           return new AuthLoginSuccess(user);
         }),
         catchError(error => of(new AuthLoginFailed()))
-      )
-    )
+      );
+    })
   );
 }
