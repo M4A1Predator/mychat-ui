@@ -18,6 +18,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { HomeComponent } from './home/home.component';
 import { ConversationListComponent } from './conversation/conversation-list/conversation-list.component';
 import { AuthGuardService } from './auth/auth-guard.service';
+import { ConversationDetailComponent } from './conversation/conversation-detail/conversation-detail.component';
 
 export function debug(reducer: ActionReducer<any>): ActionReducer<any> {
   return (state, action) => {
@@ -47,7 +48,8 @@ export const metaReducers: MetaReducer<any>[] = [debug, localStorageSyncReducer]
     LayoutComponent,
     LoginFormComponent,
     HomeComponent,
-    ConversationListComponent
+    ConversationListComponent,
+    ConversationDetailComponent
   ],
   imports: [
     BrowserModule,

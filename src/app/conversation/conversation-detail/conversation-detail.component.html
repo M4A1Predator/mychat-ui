@@ -1,0 +1,21 @@
+<app-layout>
+  <div class="container">
+    <h4>Messages</h4>
+    <div class="chat-tail" #chat>
+      <!-- <div class="message-tail"><span>user:</span> <span>TEST</span></div>
+      <div class="message-tail"><span>user:</span> <span>TEST</span></div>
+      <div class="message-tail"><span>user:</span> <span>TEST</span></div> -->
+      <ng-template ngFor let-msg [ngForOf]="oldMessages">
+        <div class="message-tail"><span>{{msg.fromName}}:</span> <span>{{msg.body}}</span></div>
+      </ng-template>
+    </div>
+    <div class="row chat-input">
+      <div class="col-md-9">
+        <input type="text" [(ngModel)]="message" class="form-control" placeholder="Chat..." />
+      </div>
+      <div class="col-md-3">
+        <button class="btn btn-info" (click)="send()">Send</button>
+      </div>
+    </div>
+  </div>
+</app-layout>

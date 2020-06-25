@@ -13,12 +13,11 @@ export class AuthGuardService implements CanActivate  {
   constructor(private store: Store<any>) { }
 
   canActivate(): Observable<boolean> {
-    return this.store.select('user').pipe(map((state: any) => {
-      console.log(state)
-      if (!state || !state.user) {
+    return this.store.select('user').pipe(map((user: User) => {
+      if (!user) {
         return false;
       }
-      return !!state.user.accessToken;
+      return !!user.accessToken;
     }));
   }
 

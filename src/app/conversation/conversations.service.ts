@@ -6,6 +6,8 @@ import { Store } from '@ngrx/store';
 import { map, mergeMap } from 'rxjs/operators';
 import { AuthService } from '../auth/auth.service';
 import { Conversation } from '../model/Conversation';
+import { Message } from '../model/message';
+import { UserDetail } from '../model/user-detail';
 
 @Injectable({
   providedIn: 'root'
@@ -17,11 +19,29 @@ export class ConversationsService {
               private authService: AuthService) { }
 
   public getConversations(): Observable<any> {
-    return this.store.select('user').pipe(mergeMap(state => {
+    return this.store.select('user').pipe(mergeMap(user => {
       const options = {
-        headers : this.authService.getHeader(state.user)
+        headers : this.authService.getHeader(user)
       };
       return this.http.get(environment.API_URL + 'conversations', options).pipe(map((c: Conversation[]) => c));
+    }));
+  }
+
+  public getOldMessages(conId: string, page: number): Observable<Message[]> {
+    return this.store.select('user').pipe(mergeMap(user => {
+      const options = {
+        headers : this.authService.getHeader(user)
+      };
+      return this.http.get<Message[]>(`${environment.API_URL}conversations/${conId}/messages?page=${page}`, options);
+    }));
+  }
+
+  public getConversationUsers(conId: string) {
+    return this.store.select('user').pipe(mergeMap(user => {
+      const options = {
+        headers : this.authService.getHeader(user)
+      };
+      return this.http.get<UserDetail[]>(`${environment.API_URL}conversations/${conId}/users`, options);
     }));
   }
 }
