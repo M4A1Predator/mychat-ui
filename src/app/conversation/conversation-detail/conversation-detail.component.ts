@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, Renderer2, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Renderer2, OnDestroy, TemplateRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { environment } from '../../../environments/environment';
 import { Store } from '@ngrx/store';
@@ -24,10 +24,12 @@ export class ConversationDetailComponent implements OnInit, OnDestroy {
   stompClient: any;
 
   message = '';
-  oldMessages: Message[];
-  conversationUsers: UserDetail[];
+  oldMessages: Message[] = [];
+  conversationUsers: {[key: string]: UserDetail} = {};
 
   @ViewChild('chat') chatEl: ElementRef;
+
+  @ViewChild('newMsg') newMsg: TemplateRef<any>;
 
   constructor(private route: ActivatedRoute,
               private store: Store<any>,
@@ -35,10 +37,6 @@ export class ConversationDetailComponent implements OnInit, OnDestroy {
               private renderer: Renderer2) { }
 
   ngOnInit(): void {
-    // this.sub.add(this.route.paramMap.subscribe(pm => {
-    //   this.conversationId = pm.get('conversationId');
-    //   this.connect(this.conversationId);
-    // }));
     this.sub.add(
       this.route.paramMap.pipe(map(pm => {
         this.conversationId = pm.get('conversationId');
@@ -49,14 +47,18 @@ export class ConversationDetailComponent implements OnInit, OnDestroy {
         return this.conversationId;
       }))
       .pipe(mergeMap(conId => {
-        this.conversationsService.getConversationUsers(this.conversationId).subscribe((users: UserDetail[]) => {
-
-        });
+        this.sub.add(this.conversationsService.getConversationUsers(this.conversationId).subscribe((users: UserDetail[]) => {
+          this.conversationUsers = {};
+          users.forEach(u => {
+            this.conversationUsers[u.userId] = u;
+          });
+        }));
 
         return this.conversationsService.getOldMessages(this.conversationId, 0);
       }))
       .subscribe(messages => {
         this.oldMessages = messages;
+        setTimeout(() => this.scrollChat(), 250) ;
       })
     );
   }
@@ -88,9 +90,10 @@ export class ConversationDetailComponent implements OnInit, OnDestroy {
         this.stompClient.subscribe('/user/topic/chat', (greeting) => {
           const message: Message = JSON.parse(greeting.body);
           const d = this.renderer.createElement('div');
-          const t = this.renderer.createText(message.body);
+          const t = this.renderer.createText(this.getUserName(message.from) + ' : ' + message.body);
           this.renderer.appendChild(d, t);
           this.renderer.appendChild(this.chatEl.nativeElement, d);
+          this.scrollChat();
         });
       });
     });
@@ -107,6 +110,15 @@ export class ConversationDetailComponent implements OnInit, OnDestroy {
       conversationId : this.conversationId
     };
     this.stompClient.send('/app/send', {}, JSON.stringify(data));
+  }
+
+  getUserName(userId: string) {
+    const u = this.conversationUsers[userId];
+    return u && u.username;
+  }
+
+  scrollChat() {
+    this.chatEl.nativeElement.scrollTop = this.chatEl.nativeElement.scrollHeight;
   }
 
 }

@@ -6,7 +6,9 @@
       <div class="message-tail"><span>user:</span> <span>TEST</span></div>
       <div class="message-tail"><span>user:</span> <span>TEST</span></div> -->
       <ng-template ngFor let-msg [ngForOf]="oldMessages">
-        <div class="message-tail"><span>{{msg.fromName}}:</span> <span>{{msg.body}}</span></div>
+        <div class="message-tail" >
+          <span>{{getUserName(msg.from)}} : </span> <span>{{msg.body}}</span>
+        </div>
       </ng-template>
     </div>
     <div class="row chat-input">
@@ -18,4 +20,10 @@
       </div>
     </div>
   </div>
+
+  <ng-template #newMsg>
+    <div class="message-tail" >
+      zxc
+    </div>
+  </ng-template>
 </app-layout>

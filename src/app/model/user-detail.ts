@@ -1,4 +1,4 @@
 export class UserDetail {
-  public id: string;
+  public userId: string;
   public username: string;
 }
