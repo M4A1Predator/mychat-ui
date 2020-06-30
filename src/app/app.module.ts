@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { StoreModule, ActionReducer, MetaReducer, ActionReducerMap } from '@ngrx/store';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { localStorageSync } from 'ngrx-store-localstorage';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -19,6 +19,7 @@ import { HomeComponent } from './home/home.component';
 import { ConversationListComponent } from './conversation/conversation-list/conversation-list.component';
 import { AuthGuardService } from './auth/auth-guard.service';
 import { ConversationDetailComponent } from './conversation/conversation-detail/conversation-detail.component';
+import { HttpErrorInterceptor } from './interceptors/HttpErrorInterceptor';
 
 export function debug(reducer: ActionReducer<any>): ActionReducer<any> {
   return (state, action) => {
@@ -61,7 +62,10 @@ export const metaReducers: MetaReducer<any>[] = [debug, localStorageSyncReducer]
     EffectsModule.forRoot([]),
     EffectsModule.forFeature([AuthEffects])
   ],
-  providers: [AuthGuardService],
+  providers: [
+    AuthGuardService,
+    { provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

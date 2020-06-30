@@ -12,6 +12,11 @@ export function authReducer(state = initialState, action: AuthAction) {
         ...action.payload
       };
     }
+    case AuthActionType.AUTH_LOGOUT_SUCCESS: {
+      return {
+        ...initialState
+      };
+    }
     default:
       return state;
   }

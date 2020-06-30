@@ -22,6 +22,9 @@
         </li>
       </ul>
     </div>
+    <div *ngIf="isLoggedIn" class="form-inline my-2 my-lg-0">
+      <a style="cursor: pointer;" (click)="logout()">Logout</a>
+    </div>
     <!-- <form (keydown.enter)="onSearch($event)" class="form-inline my-2 my-lg-0">
       <input (input)="onChange($event)" value="{{keyword}}"
         class="form-control mr-sm-3 search" type="search" placeholder="Search Events..." aria-label="Search" />

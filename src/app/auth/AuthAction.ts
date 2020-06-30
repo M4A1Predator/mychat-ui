@@ -5,7 +5,9 @@ import { Credential } from '../model/Credential';
 export enum AuthActionType {
   AUTH_LOGIN = 'AUTH_LOGIN',
   AUTH_LOGIN_SUCCESS = 'AUTH_LOGIN_SUCCESS',
-  AUTH_LOGIN_FAILED = 'AUTH_LOGIN_FAILED'
+  AUTH_LOGIN_FAILED = 'AUTH_LOGIN_FAILED',
+  AUTH_LOGOUT = 'AUTH_LOGOUT',
+  AUTH_LOGOUT_SUCCESS = 'AUTH_LOGOUT_SUCCESS',
 }
 
 export class AuthLogin implements Action {
@@ -23,4 +25,13 @@ export class AuthLoginFailed implements Action {
   readonly type = AuthActionType.AUTH_LOGIN_FAILED;
 }
 
-export type AuthAction = AuthLogin | AuthLoginSuccess | AuthLoginFailed;
+export class AuthLogout implements Action {
+  readonly type = AuthActionType.AUTH_LOGOUT;
+}
+
+export class AuthLogoutSuccess implements Action {
+  readonly type = AuthActionType.AUTH_LOGOUT_SUCCESS;
+}
+
+export type AuthAction = AuthLogin | AuthLoginSuccess | AuthLoginFailed
+                        | AuthLogout | AuthLogoutSuccess;

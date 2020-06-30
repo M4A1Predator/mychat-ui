@@ -3,7 +3,7 @@ import { Actions, Effect, ofType } from '@ngrx/effects';
 import { switchMap, catchError, map } from 'rxjs/operators';
 
 import { AuthService } from './auth.service';
-import { AuthActionType, AuthLoginFailed, AuthLoginSuccess } from './AuthAction';
+import { AuthActionType, AuthLoginFailed, AuthLoginSuccess, AuthLogoutSuccess } from './AuthAction';
 import { Credential } from '../model/Credential';
 import { User } from '../model/User';
 import { of } from 'rxjs';
@@ -27,6 +27,16 @@ export class AuthEffects {
         }),
         catchError(error => of(new AuthLoginFailed()))
       );
+    })
+  );
+
+  @Effect()
+  logout$ = this.actions$.pipe(
+    ofType(AuthActionType.AUTH_LOGOUT),
+    switchMap((act: any) => {
+      return this.authService.logout().pipe(map(data => {
+        return new AuthLogoutSuccess();
+      }));
     })
   );
 }

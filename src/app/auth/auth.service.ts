@@ -46,9 +46,21 @@ export class AuthService {
     }));
   }
 
+  logout() {
+    return this.store.select('user').pipe(user => {
+      return of(null);
+    });
+  }
+
   getHeader(user: User) {
     return {
       Authorization: `Bearer ${user.accessToken}`
     } as any;
+  }
+
+  isLoggedIn(): Observable<boolean> {
+    return this.store.select('user').pipe(map((user: User) => {
+      return !!user && !!user.accessToken;
+    }));
   }
 }

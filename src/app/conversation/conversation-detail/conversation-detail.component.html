@@ -6,14 +6,14 @@
       <div class="message-tail"><span>user:</span> <span>TEST</span></div>
       <div class="message-tail"><span>user:</span> <span>TEST</span></div> -->
       <ng-template ngFor let-msg [ngForOf]="oldMessages">
-        <div class="message-tail" >
+        <div [ngClass]="{'message-tail': true, 'self-message': isMessageOwner(msg.from)}">
           <span>{{getUserName(msg.from)}} : </span> <span>{{msg.body}}</span>
         </div>
       </ng-template>
     </div>
     <div class="row chat-input">
       <div class="col-md-9">
-        <input type="text" [(ngModel)]="message" class="form-control" placeholder="Chat..." />
+        <input type="text" #chatMessage [(ngModel)]="message" (keyup.enter)="onEnterChat()" class="form-control" placeholder="Chat..." />
       </div>
       <div class="col-md-3">
         <button class="btn btn-info" (click)="send()">Send</button>
