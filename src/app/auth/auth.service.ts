@@ -63,4 +63,15 @@ export class AuthService {
       return !!user && !!user.accessToken;
     }));
   }
+
+  getAuthHeader(): Observable<any> {
+    return this.store.select('user').pipe(map((user: User) => {
+      const headers = {
+        headers: {
+          Authorization: `Bearer ${user.accessToken}`
+        }
+      } as any;
+      return headers;
+    }));
+  }
 }

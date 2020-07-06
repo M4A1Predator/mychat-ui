@@ -1,12 +1,12 @@
 <app-layout>
   <div class="container">
-    <div class="cons-list">
-      <!-- <div>
-        ROOM A
-      </div>
+    <div class="row">
       <div>
-        ROOM A
-      </div> -->
+        <a [routerLink]="['/conversations/new']"><button class="btn btn-primary">New Room</button></a>
+      </div>
+    </div>
+    <div class="cons-list">
+
       <div *ngFor="let con of conversations; let i = index;">
         <a [routerLink]="['/conversations', con.id]">
           {{getRoomName(con)}}

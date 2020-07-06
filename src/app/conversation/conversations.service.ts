@@ -8,6 +8,7 @@ import { AuthService } from '../auth/auth.service';
 import { Conversation } from '../model/Conversation';
 import { Message } from '../model/message';
 import { UserDetail } from '../model/user-detail';
+import { CreateConversationResult } from '../model/create-conversation-result';
 
 @Injectable({
   providedIn: 'root'
@@ -42,6 +43,15 @@ export class ConversationsService {
         headers : this.authService.getHeader(user)
       };
       return this.http.get<UserDetail[]>(`${environment.API_URL}conversations/${conId}/users`, options);
+    }));
+  }
+
+  public createConversation(userId: string): Observable<CreateConversationResult> {
+    return this.authService.getAuthHeader().pipe<CreateConversationResult>(mergeMap<any, Observable<any>>(headers => {
+      const data = {
+        userId
+      };
+      return this.http.post<CreateConversationResult>(`${environment.API_URL}conversations`, data, headers);
     }));
   }
 }

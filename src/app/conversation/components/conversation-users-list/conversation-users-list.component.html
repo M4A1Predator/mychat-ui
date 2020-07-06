@@ -1,0 +1,5 @@
+<div class="users-list">
+  <div *ngFor="let user of users; let i = index;">
+    <button (click)="clickChat(user.userId)" class="btn btn-sm btn-info">Chat</button> {{user.username}}
+  </div>
+</div>

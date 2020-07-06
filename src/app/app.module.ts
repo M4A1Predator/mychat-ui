@@ -20,6 +20,8 @@ import { ConversationListComponent } from './conversation/conversation-list/conv
 import { AuthGuardService } from './auth/auth-guard.service';
 import { ConversationDetailComponent } from './conversation/conversation-detail/conversation-detail.component';
 import { HttpErrorInterceptor } from './interceptors/HttpErrorInterceptor';
+import { ConversationAddComponent } from './conversation/conversation-add/conversation-add.component';
+import { ConversationUsersListComponent } from './conversation/components/conversation-users-list/conversation-users-list.component';
 
 export function debug(reducer: ActionReducer<any>): ActionReducer<any> {
   return (state, action) => {
@@ -50,7 +52,9 @@ export const metaReducers: MetaReducer<any>[] = [debug, localStorageSyncReducer]
     LoginFormComponent,
     HomeComponent,
     ConversationListComponent,
-    ConversationDetailComponent
+    ConversationDetailComponent,
+    ConversationAddComponent,
+    ConversationUsersListComponent
   ],
   imports: [
     BrowserModule,
